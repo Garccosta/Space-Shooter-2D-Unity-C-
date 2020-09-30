@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {   
     [SerializeField] // cmake possible to see private variables in the inspector
-    private float _speed = 2.5f;
+    private float _speed = 10f;
 
     [SerializeField]
     private GameObject _laserPrefab;
@@ -16,11 +16,18 @@ public class Player : MonoBehaviour
     private float _canFire = -1f;
     [SerializeField]
     private int _lifePoints = 3;
+    private SpawnManager _spawnManager;
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+
+        if(_spawnManager == null)
+        {
+            Debug.LogError(" The Spawn Manager is null.");
+        }
     }
 
     // Update is called once per frame
@@ -64,6 +71,7 @@ public class Player : MonoBehaviour
 
         if(_lifePoints < 1)
         {
+            _spawnManager.onPlayerDeath();
             Destroy(this.gameObject);
         }
     }
